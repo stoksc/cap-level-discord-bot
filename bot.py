@@ -343,8 +343,8 @@ async def player(*args):
         for tr in table.find_all("tr"):
             for td in tr:
                # if td[::-1][0:6] ==
-            print("\nnewtr\n")
-            formatted_string += "\n"
+                formatted_string += td.text
+                formatted_string += "\n"
 
     # return the formatted string from the data to the user
     return await caplevel_bot.say(formatted_string)
