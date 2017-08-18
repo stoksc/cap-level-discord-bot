@@ -326,27 +326,48 @@ async def item(*args):
 # player stats pulled from wowprogress.com
 @caplevel_bot.command()
 async def player(*args):
-    # create the url from the player to search
-    url = "https://www.wowprogress.com/character/us/"
-    for arg in args:
-        url += arg + "/"
+    try:
+        # create the url from the player to search
+        url = "https://www.wowprogress.com/character/us/"
+        for arg in args:
+            url += arg + "/"
 
-    # pull the url for the player from the query url
-    sauce = urllib.request.urlopen(url)
-    soup = bs.BeautifulSoup(sauce, 'lxml')
+        # pull the url for the player from the query url
+        sauce = urllib.request.urlopen(url)
+        soup = bs.BeautifulSoup(sauce, 'lxml')
 
-    # pull the data from the player url from the table on the page
-    # while formatting it in an acceptable fashion
-    formatted_string = ''
-    table_arr = soup.find("div",id='tiers_details').find_all("table", class_="rating")
-    for table in table_arr:
-        for tr in table.find_all("tr"):
-            for td in tr:
-               # if td[::-1][0:6] ==
-                formatted_string += td.text
-                formatted_string += "\n"
+        # pull the data from the player url from the table on the page
+        # while formatting it in an acceptable fashion
+        formatted_string = ''
+        table_arr = soup.find("div",id='tiers_details').find_all("table", class_="rating")
+        for table in table_arr:
+            for tr in table.find_all("tr"):
+                for index, td in enumerate(tr):
+                    cell_content = td.text
+                    cell_content_ed = ' '.join(str(string_part) for string_part in cell_content.split()[0:len(cell_content.split()) - 1])
+                    if cell_content in data.header:
+                        pass
+                    elif cell_content in data.released_raids:
+                        formatted_string += "\n**" + cell_content + "**:"
+                    elif cell_content_ed in data.released_bosses:
+                        formatted_string += "\n" + cell_content_ed + " *" + cell_content.split()[len(cell_content.split()) - 1] + "*"
+                    elif True:
+                        try:
+                            if (cell_content.split()[1] == "days" or "months" or "month" or "day" or "hour" or "hours"):
+                                formatted_string += "\t(" + cell_content + ")"
+                        except:
+                            pass
+                    else:
+                        pass
 
-    # return the formatted string from the data to the user
-    return await caplevel_bot.say(formatted_string)
+        # create the embed object (looks nicer)
+        em = discord.Embed(title='', description=formatted_string, url=url, color=0xE6CC80)
+        em.set_author(name=args[1] + " on " + args[0])
 
+        # return the formatted string from the data to the user
+        return await caplevel_bot.say(embed=em)
+    except:
+        return await caplevel_bot.say(":anger: Something went wrong.")
+
+# run the bot
 caplevel_bot.run(secrets.BOT_TOKEN)
