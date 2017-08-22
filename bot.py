@@ -7,23 +7,9 @@ import data
 
 caplevel_bot = Bot(command_prefix="!")
 
-
 @caplevel_bot.event
 async def on_read():
     print("Client logged in")
-
-# basic command
-@caplevel_bot.command()
-async def hello(*args):
-    return await caplevel_bot.say("Hello world!")
-
-# testing an echo command
-@caplevel_bot.command()
-async def extra(*args):
-    try:
-        return await caplevel_bot.say(args[0])
-    except:
-        return await caplevel_bot.say("Nothing extra needed.")
 
 # command that takes args and returns a guide link on wowhead.com
 @caplevel_bot.command()
