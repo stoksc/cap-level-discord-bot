@@ -24,9 +24,19 @@ import bs4 as bs
 import secrets
 import data
 
+<<<<<<< HEAD
 # set the prefix for the bot commands
 caplevel_bot = Bot(command_prefix="!caplevel")
 
+=======
+caplevel_bot = Bot(command_prefix="!")
+
+@caplevel_bot.event
+async def on_read():
+    print("Client logged in")
+
+# command that takes args and returns a guide link on wowhead.com
+>>>>>>> 87128f0b925a28c3cfe91a0602e13b2695d18da2
 @caplevel_bot.command()
 async def guide(*args):
     """
