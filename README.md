@@ -4,10 +4,10 @@ simple, terribly written bot that does stuff for people who play WoW and use dis
 ## Getting Started
 
 #### If you want, for some odd reason, to run this on your machine, here's how:
-1. Make sure you have a Python3 environment installed with lxml, BeautifulSoup4 and discord packages installed.
+1. Make sure you have a Python3 environment with lxml, BeautifulSoup4 and discord packages installed.
 2. After this is done, go to discord.com and login. Scroll to the bottom of the home page and click developers.
 3. Click Add Bot. Name your bot and generate a secret key and a token.
-4. Fork this repo and activate the Python3 environment.
+4. Clone this repo and activate the Python3 environment.
 5. Open secrets.py and replace the secret key and token with yours.
 6. Run bot.py, add the bot to your channel and enjoy? Or be frustrated.
 
