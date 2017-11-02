@@ -21,16 +21,16 @@ simple, terribly written bot that does stuff for people who play WoW and use dis
 * **Bradley Laney** - *Initial work* - [Lieblos](https://github.com/stoksc)
 
 ## Examples
-####!caplevel spell *spellname* *entryno*
+#### !caplevel spell *spellname* *entryno*
 ![!caplevel spell *spellname* *entryno*](/examples/spell_ex.png)
 
-####!caplevel item *itemname*
+#### !caplevel item *itemname*
 ![!caplevel item *itemname*](/examples/item_ex.png)
 
-####!caplevel player *server* *playername*
+#### !caplevel player *server* *playername*
 ![!caplevel player *server* *playername*](/examples/player_ex.png)
 
-####!caplevel guide *guidename*
+#### !caplevel guide *guidename*
 ![!caplevel guide *guidename*](/examples/guide_ex.png)
 
 ## License
