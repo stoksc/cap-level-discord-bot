@@ -1,4 +1,4 @@
-# cap-level-discord-bot
+# caplevel
 simple, terribly written bot that does stuff for people who play WoW and use discord. Can respond to queries about players, spells, items and guides. Goes through a lot of trouble to webscrape the data from wowdb.com and wowhead.com; later versions would be made using Blizzard's API but this was more for an exercise in webscraping for me.
 
 ## Getting Started
