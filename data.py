@@ -1,5 +1,7 @@
 import discord
 
+MAX_SIZE = 100000
+
 primary_stats = [
     'Stamina',
     'Agility',

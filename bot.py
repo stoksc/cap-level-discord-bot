@@ -24,6 +24,7 @@ import bs4 as bs
 # library specific imports
 import secrets
 import data
+import cacher
 
 # set the prefix for the bot commands
 caplevel_bot = Bot(command_prefix='!caplevel ')
@@ -35,6 +36,11 @@ async def guide(*args):
         !caplevel guide <query>
     This command constructs a URL from the <query> and posts a URL to a guide from a search of wowhead.com
     '''
+
+    # see if query already exists and uncache if so
+    cached_query =  cacher.uncache_embed('guide',''.join(args))
+    if cached_query is not None:
+        return await caplevel_bot.say(cached_query)
 
     # preparing the url from the input args
     url = 'http://www.wowhead.com/search?q='
@@ -51,6 +57,9 @@ async def guide(*args):
     result = prelim_result.get('href')
     result_url = 'http://www.wowhead.com{}'.format(result)
 
+    # cache the result
+    cacher.cache_embed(result_url,'guide',''.join(args))
+
     # printing the url to the user
     return await caplevel_bot.say(result_url)
 
@@ -62,12 +71,17 @@ async def spell(*args):
     This command constructs a URL from the query, searches wowdb.com and posts
     a discord.Embed of the <arg1>'th entry in the search return.
     '''
-    # preparing the specific spell url from the input args
+
+    # see if query already exists and uncache if so
+    cached_query =  cacher.uncache_embed('spell',''.join(args))
+    if cached_query is not None:
+        return await caplevel_bot.say(embed=cached_query)
 
     # check if args were passed
     if args == ():
         return await caplevel_bot.say('I need something to search.')
 
+    # preparing the specific spell url from the input args
     url = 'http://www.wowdb.com/search?search='
     url2 = '#t1:abilities'
     entry = None
@@ -149,6 +163,9 @@ async def spell(*args):
     em = discord.Embed(title='', description=formatted_string + '\n' + clarifying_str, colour=qual, url=new_href)
     em.set_author(name=title)
     em.set_thumbnail(url=thumbnail)
+
+    # cache the result
+    cacher.cache_embed(em,'spell',''.join(args))
     return await caplevel_bot.say(embed=em)
 
 
@@ -160,6 +177,11 @@ async def item(*args):
     Uses the <item> queried to access wowdb.com, gather information on the closest matching item
     and format and post a discord.Embed item.
     '''
+
+    # see if query already exists and uncache if so
+    cached_query =  cacher.uncache_embed('item',''.join(args))
+    if cached_query is not None:
+        return await caplevel_bot.say(embed=cached_query)
 
     # preparing the url from the input args
     url = 'http://www.wowdb.com/search?search='
@@ -183,7 +205,8 @@ async def item(*args):
                 qual = quality
                 break
     except AttributeError:
-        return await caplevel_bot.say(':anger: 404 Item not found.')
+        return_str = ':anger: 404 Item not found.'
+        return await caplevel_bot.say(return_str)
 
     # return the soup for the page of the item that was selected by the prior try/catch statements
     sauce = urllib.request.urlopen(new_href)
@@ -253,6 +276,9 @@ async def item(*args):
     em.set_thumbnail(url=thumbnail)
 
     # spits it out to the user
+
+    # cache the result
+    cacher.cache_embed(em,'item',''.join(args))
     return await caplevel_bot.say(embed=em)
 
 # player stats pulled from wowprogress.com
@@ -265,7 +291,12 @@ async def player(*args):
     on the specified server. It then uses the player information to create a discord.Embed object
     and posts it to the server.
     """
-    
+
+    # see if query already exists and uncache if so
+    cached_query =  cacher.uncache_embed('player',''.join(args))
+    if cached_query is not None:
+        return await caplevel_bot.say(embed=cached_query)
+
     # create the url from the player to search
     url = "https://www.wowprogress.com/character/us/"
     for arg in args:
@@ -278,8 +309,12 @@ async def player(*args):
     # pull the data from the player url from the table on the page
     # while formatting it in an acceptable fashion
     formatted_string = ''
-    table_arr = soup.find("div", id='tiers_details').find_all("table", class_="rating")
-    for table in table_arr:
+    table_arr = soup.find("div", id='tiers_details')
+    if table_arr is None:
+        return_str = '404 Player not found.'
+        return await caplevel_bot.say(return_str)
+    player_table = table_arr.find_all("table", class_="rating")
+    for table in player_table:
         for tr in table.find_all("tr"):
             for index, td in enumerate(tr):
                 cell_content = td.text
@@ -302,6 +337,7 @@ async def player(*args):
     em.set_author(name=args[1] + " on " + args[0])
 
     # return the formatted string from the data to the user
+    cacher.cache_embed(em, 'player',''.join(args))
     return await caplevel_bot.say(embed=em)
 
 # run the bot
