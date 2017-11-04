@@ -15,6 +15,7 @@ to the user like:
 
 # standard library imports
 import urllib.request
+import os
 
 # related third party imports
 from discord.ext.commands import Bot
@@ -25,6 +26,15 @@ import bs4 as bs
 import secrets
 import data
 import cacher
+
+# setup directories for caching query result embeds
+for dir_name in ('spell', 'guide', 'player', 'item'):
+    full_dir_name = '{}\\{}'.format(os.getcwd(), dir_name)
+    try:
+        os.mkdir(full_dir_name)
+    except FileExistsError:
+        os.rmdir(full_dir_name)
+        os.mkdir(full_dir_name)
 
 # set the prefix for the bot commands
 caplevel_bot = Bot(command_prefix='!caplevel ')

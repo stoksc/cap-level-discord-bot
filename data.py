@@ -1,6 +1,6 @@
 import discord
 
-MAX_SIZE = 100000
+MAX_SIZE = 10**7
 
 primary_stats = [
     'Stamina',
